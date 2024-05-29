@@ -18,7 +18,7 @@ struct SNAKE
 {
     struct BODY body[WIDTH * HEIGHT];
     int size;
-    float speed = 200;
+    int speed = 200;
 } snake;
 //食物模块，待完善
 
