@@ -13,6 +13,16 @@ struct BODY
     int x;
     int y;
 } body;
+//食物
+struct Food
+{
+	int x;
+	int y;
+	int r;        //半径
+	bool flag;    //是否吃了
+	DWORD color;  //颜色
+}food;
+
 //定义的一条蛇，大小与长度 
 struct SNAKE
 {
@@ -20,7 +30,6 @@ struct SNAKE
     int size;
     int speed = 200;
 } snake;
-//食物模块，待完善
 
 
 
@@ -29,6 +38,7 @@ struct SNAKE
 
 
 void initSnake(void);//初始化蛇 
+void initWall(void);
 void daw(void);//画蛇 
 void input(void);//控制模块 
 void move(void);//移动模块 
