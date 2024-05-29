@@ -9,6 +9,7 @@ int main(int argc, char* argv[]) {
     CONSOLE_CURSOR_INFO cursor_info = { 1, 0 };
     SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &cursor_info);
     initSnake();
+    initWall();
     //snake.size += 10;//仅为测试bodydie使用
     while (1) {
         walldie();
@@ -18,7 +19,7 @@ int main(int argc, char* argv[]) {
         move();
         Sleep(200);//Sleep为暂时替代速度调试
         //speed_change();
-        
+
     }
     return 0;
 }
@@ -35,15 +36,18 @@ void initSnake(void) {
     snake.body[2].x = WIDTH / 2 - 2;
     snake.body[2].y = HEIGHT / 2;
 }
+
+
 //画出初始的蛇 
 void daw(void) {
+
     //COORD为conin库中结构体 
     COORD coord = { 0 };
     i = 0;
     for (i; i < snake.size; i++)
     {
-        coord.X = snake.body[i].x ;
-        coord.Y = snake.body[i].y ;
+        coord.X = snake.body[i].x;
+        coord.Y = snake.body[i].y;
         //这串长代码可以改变光标位置 
         SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
         if (i == 0)
@@ -68,7 +72,7 @@ void input(void) {
                 dirY = 0;
             }
             break;
-            
+
         case 'd':
             if (abs(dirX) != 1 && dirY != 0) {
                 dirX = 1;
@@ -101,9 +105,9 @@ void move(void) {
         snake.body[i].x = snake.body[i - 1].x;
         snake.body[i].y = snake.body[i - 1].y;
     }
-    snake.body[0].x += dirX ;
-    snake.body[0].y += dirY ;
-    
+    snake.body[0].x += dirX;
+    snake.body[0].y += dirY;
+
 }
 //尚未完成的死亡机制 ,后续完善 
 void walldie(void) {
@@ -125,5 +129,26 @@ void speed_change(void) {
     if (1) {
         Sleep(snake.speed);
         snake.speed -= 3;
+    }
+}
+void initWall(void)
+{
+    for (size_t i = 0;i <= HEIGHT;i++)
+    {
+        for (size_t j = 0;j <= WIDTH;j++)
+        {
+            if (j == WIDTH)
+            {
+                printf("|");
+            }
+            else if (i == HEIGHT)
+            {
+                printf("_");
+            }
+            else {
+                printf(" ");
+            }
+        }
+        printf("\n");
     }
 }
