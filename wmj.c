@@ -1,5 +1,6 @@
 #include<stdio.h>
 #include<conio.h>
+#include<stdlib.h>
 #include<graphics.h>
 #define SNAKE_NUM 500
 
@@ -10,6 +11,17 @@ enum DIR  //蛇的方向
 	LEFT,
 	RIGHT,
 };
+
+//食物
+struct Food
+{
+	int x;
+	int y;
+	int r;        //半径
+	bool flag;    //是否吃了
+	DWORD color;  //颜色
+}food;
+
 
 struct Snake
 {
@@ -23,6 +35,8 @@ void GameInit()
 {
 	initgraph(640, 480);
 
+	srand(GetTickCount());
+
 	//初始化蛇
 	snake.size = 3;
 	snake.speed = 10;
@@ -33,7 +47,14 @@ void GameInit()
 		snake.coor[i].x = 40-10*i;
 		snake.coor[i].y = 10;
 	}
+
+	food.x = rand() % 640;
+	food.y = rand() % 480;
+	food.color = RGB(rand()%256,rand()%256,rand()%256);
+	food.r = rand() % 10 + 5;
+	food.flag = true;
 }
+
 
 void GameDraw()
 {
@@ -50,6 +71,12 @@ void GameDraw()
 	{
 		solidcircle(snake.coor[i].x, snake.coor[i].y, 5);
 	}
+	//食物
+	if (food.flag)
+	{
+		solidcircle(food.x, food.y, food.r);
+	}
+
 	EndBatchDraw();
 }
 
@@ -138,8 +165,36 @@ void keyControl()
 				snake.dir = RIGHT;
 			}
 			break;
+		case ' '://暂停
+			while (1)
+			{
+				if (_getch() == ' ')
+					return;
+			}
+			break;
 		}
 	}
+}
+
+void EatFood()
+{
+	if (food.flag&&snake.coor[0].x >= food.x-food.r && snake.coor[0].x <= food.x+food.r &&
+		snake.coor[0].y >= food.y-food.r && snake.coor[0].y <= food.y+food.r)
+	{
+		food.flag = false;
+		snake.size++;
+	}
+	//吃了重新生成
+	if (!food.flag)
+	{
+		food.x = rand() % 640;
+		food.y = rand() % 480;
+		food.color = RGB(rand() % 256, rand() % 256, rand() % 256);
+		food.r = rand() % 10 + 5;
+		food.flag = true;
+	}
+
+
 }
 
 int main()
@@ -151,7 +206,8 @@ int main()
 		snakeMove();
 		GameDraw();
 		keyControl();
-		Sleep(20);
+		EatFood();
+		Sleep(100);
 	}
 
 	return 0;
