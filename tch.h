@@ -1,7 +1,7 @@
 #ifndef _TCS_H
 #define _TCS_H
-#define WIDTH 40
-#define HEIGHT 30
+#define WIDTH 60
+#define HEIGHT 50
 int i = 0;
 int score = 0;
 int lastx = 0;
@@ -18,6 +18,7 @@ struct SNAKE
 {
     struct BODY body[WIDTH * HEIGHT];
     int size;
+    float speed = 200;
 } snake;
 //食物模块，待完善
 
@@ -26,12 +27,12 @@ struct SNAKE
 //场景，待完善
 
 
- 
+
 void initSnake(void);//初始化蛇 
 void daw(void);//画蛇 
 void input(void);//控制模块 
 void move(void);//移动模块 
 void bodydie(void);// 身体触碰死亡 
 void walldie(void);//墙壁触碰死亡 
-void lenplus(void);//身长增加 
+void speed_change(void);//速度改变
 #endif
