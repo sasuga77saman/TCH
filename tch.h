@@ -4,6 +4,8 @@
 #define HEIGHT 30
 int i = 0;
 int score = 0;
+int lastx = 0;
+int lasty = 0;
 int dirX = 1, dirY = 0;
 //蛇的身体节点坐标结构体 
 struct BODY
