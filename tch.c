@@ -12,11 +12,9 @@ int main(int argc, char *argv[]) {
 		daw();
 		input();
 		move();
-		system("cls");
+		//system("cls");
 		daw();
 		sleep(1); 
-		snake.size++;
-			
 	}
 	return 0;
 }
@@ -49,6 +47,10 @@ void daw(void){
         else
             printf("*");//蛇身体 
     }
+        coord.X = lastx;
+        coord.Y = lasty;
+        SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
+        printf(" ");
 }
 void input(void){
 	//_kbhit函数确认是否从键盘获取值，获得输出真；反之亦然 
@@ -80,6 +82,8 @@ if (_kbhit())
 }
 void move(void){
 	//从尾部开始，将前一个位置赋值给后一个 ，以达到移动的目的 
+	lastx = snake.body[snake.size-1].x;
+	lasty = snake.body[snake.size-1].y;
     i = snake.size-1; 
     for (i; i  > 0; i--)
     {
@@ -94,7 +98,7 @@ void move(void){
 void walldie(void){
     if(snake.body[0].x <= 0 || snake.body[0].x >= WIDTH || snake.body[0].y <= 0 || snake.body[0].x >= HEIGHT)
     printf("YOU DIE!!!");
-    return ;
+    return;
 }
 void bodydie(void){
 	i = 1;
@@ -108,3 +112,5 @@ void lenlpus(void){
 	snake.size++;
 	return snake.size;
 }
+
+
