@@ -2,26 +2,27 @@
 #include <stdio.h>
 #include <conio.h>
 #include <windows.h>
+#include<graphics.h>
 #include "tcs.h"
-int main(int argc, char *argv[]) {
-	//隐藏光标 
-	CONSOLE_CURSOR_INFO cursor_info = {1, 0};
+int main(int argc, char* argv[]) {
+    //隐藏光标 
+    CONSOLE_CURSOR_INFO cursor_info = { 1, 0 };
     SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &cursor_info);
-	initSnake();
-	while(1){
-		daw();
-		input();
-		move();
-		//system("cls");
-		daw();
-		sleep(1); 
-	}
-	return 0;
+    initSnake();
+    while (1) {
+        daw();
+        input();
+        move();
+        //system("cls");
+        //daw();
+        Sleep(100);
+    }
+    return 0;
 }
 //蛇模型的初始化，出生位置为场景中心 
-void initSnake(void){
-	snake.size = 3;
-	//snake.body[0]为蛇的头部 
+void initSnake(void) {
+    snake.size = 3;
+    //snake.body[0]为蛇的头部 
     snake.body[0].x = WIDTH / 2;
     snake.body[0].y = HEIGHT / 2;
 
@@ -32,9 +33,9 @@ void initSnake(void){
     snake.body[2].y = HEIGHT / 2;
 }
 //画出初始的蛇 
-void daw(void){
-	//COORD为conin库中结构体 
-	COORD coord = {0};
+void daw(void) {
+    //COORD为conin库中结构体 
+    COORD coord = { 0 };
     i = 0;
     for (i; i < snake.size; i++)
     {
@@ -47,70 +48,73 @@ void daw(void){
         else
             printf("*");//蛇身体 
     }
-        coord.X = lastx;
-        coord.Y = lasty;
-        SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
-        printf(" ");
+    coord.X = lastx;
+    coord.Y = lasty;
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
+    printf(" ");
 }
-void input(void){
-	//_kbhit函数确认是否从键盘获取值，获得输出真；反之亦然 
-if (_kbhit())
+void input(void) {
+    //_kbhit函数确认是否从键盘获取值，获得输出真；反之亦然 
+    if (_kbhit())
     {
         switch (_getch())//从键盘获得值 
         {
         case 'a':
-            dirX = -1;
-            dirY = 0;
+            if (abs(dirX) != 1 && dirY != 0) {
+                dirX = -1;
+                dirY = 0;
+            }
             break;
+            
         case 'd':
-            dirX = 1;
-            dirY = 0;
+            if (abs(dirX) != 1 && dirY != 0) {
+                dirX = 1;
+                dirY = 0;
+            }
             break;
         case 'w':
-            dirX = 0;
-            dirY = -1;
+            if (dirX != 0 && abs(dirY) != 1) {
+                dirX = 0;
+                dirY = -1;
+            }
             break;
         case 's':
-            dirX = 0;
-            dirY = 1;
-            break;
-        case 'x':
-            exit(0);
+            if (dirX != 0 && abs(dirY) != 1) {
+                dirX = 0;
+                dirY = 1;
+            }
             break;
         }
     }
 }
-void move(void){
-	//从尾部开始，将前一个位置赋值给后一个 ，以达到移动的目的 
-	lastx = snake.body[snake.size-1].x;
-	lasty = snake.body[snake.size-1].y;
-    i = snake.size-1; 
-    for (i; i  > 0; i--)
+void move(void) {
+
+    //从尾部开始，将前一个位置赋值给后一个 ，以达到移动的目的 
+    lastx = snake.body[snake.size - 1].x;
+    lasty = snake.body[snake.size - 1].y;
+    i = snake.size - 1;
+    for (i; i > 0; i--)
     {
         snake.body[i].x = snake.body[i - 1].x;
         snake.body[i].y = snake.body[i - 1].y;
     }
     snake.body[0].x += dirX;
     snake.body[0].y += dirY;
-	
+
 }
 //尚未完成的死亡机制 ,后续完善 
-void walldie(void){
-    if(snake.body[0].x <= 0 || snake.body[0].x >= WIDTH || snake.body[0].y <= 0 || snake.body[0].x >= HEIGHT)
-    printf("YOU DIE!!!");
+void walldie(void) {
+    if (snake.body[0].x <= 0 || snake.body[0].x >= WIDTH || snake.body[0].y <= 0 || snake.body[0].x >= HEIGHT)
+        printf("YOU DIE!!!");
     return;
 }
-void bodydie(void){
-	i = 1;
-	for(i ;i <snake.size; i++){
-		if(snake.body[0].x == snake.body[i].x && snake.body[0].y == snake.body[i].y)
-		printf("YOU DIE!!!");
-        return ;
-	}
-}
-void lenlpus(void){
-	snake.size++;
-	return snake.size;
+void bodydie(void) {
+    i = 1;
+    for (i; i < snake.size; i++) {
+        if (snake.body[0].x == snake.body[i].x && snake.body[0].y == snake.body[i].y)
+            printf("YOU DIE!!!");
+        return;
+    }
 }
 
 
