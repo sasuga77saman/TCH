@@ -14,16 +14,6 @@ struct BODY
 	int x;
 	int y;
 } body;
-//食物
-struct Food
-{
-	int x;
-	int y;
-	int r;        //半径
-	bool flag;    //是否吃了
-	DWORD color;  //颜色
-}food;
-
 //定义的一条蛇，大小与长度 
 struct SNAKE
 {
