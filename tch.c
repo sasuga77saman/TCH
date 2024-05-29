@@ -4,7 +4,12 @@
 #include <windows.h>
 #include<graphics.h>//该文件库无法识别的，应该是没有安装eazy-X，删掉这一串就好了
 #include "tcs.h"
+#include<mmsystem.h>
+#pragma comment(lib,"winmm.lib")
 int main(int argc, char* argv[]) {
+    mciSendString("open ./res/she.mp3 alias BGM", 0, 0, 0);
+    mciSendString("play BGM repeat", 0, 0, 0);
+
     //隐藏光标 
     CONSOLE_CURSOR_INFO cursor_info = { 1, 0 };
     SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &cursor_info);
@@ -21,6 +26,7 @@ int main(int argc, char* argv[]) {
         //speed_change();
 
     }
+    system("pause");
     return 0;
 }
 //蛇模型的初始化，出生位置为场景中心 
@@ -109,22 +115,42 @@ void move(void) {
     snake.body[0].y += dirY;
 
 }
-//尚未完成的死亡机制 ,后续完善 
 void walldie(void) {
+    COORD coord = { 0 };
     if (snake.body[0].x <= 0 || snake.body[0].x >= WIDTH || snake.body[0].y <= 0 || snake.body[0].y >= HEIGHT) {
+        coord.X = WIDTH / 2 - 8;
+        coord.Y = HEIGHT / 2 - 3;
+        //这串长代码可以改变光标位置 
+        SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
         printf("YOU DIE!!!");
+        coord.X = 0;
+        coord.Y = 29;
+        SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
+        printf("Game Over\n");
+        sp();
         exit(0);
     }
 }
 void bodydie(void) {
+    COORD coord = { 0 };
     i = 1;
     for (i; i < snake.size; i++) {
         if (snake.body[0].x == snake.body[i].x && snake.body[0].y == snake.body[i].y) {
+            coord.X = WIDTH / 2 - 8;
+            coord.Y = HEIGHT / 2 - 3;
+            //这串长代码可以改变光标位置 
+            SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
             printf("YOU DIE!!!");
+            coord.X = 0;
+            coord.Y = 29;
+            SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
+            printf("Game Over\n");
+            sp();
             exit(0);
         }
     }
 }
+
 void speed_change(void) {
     if (1) {
         Sleep(snake.speed);
@@ -133,15 +159,15 @@ void speed_change(void) {
 }
 void initWall(void)
 {
-    for (size_t i = 0;i <= HEIGHT;i++)
+    for (size_t i = 0; i <= HEIGHT-1; i++)
     {
-        for (size_t j = 0;j <= WIDTH;j++)
+        for (size_t j = 0; j <= WIDTH; j++)
         {
             if (j == WIDTH)
             {
                 printf("|");
             }
-            else if (i == HEIGHT)
+            else if (i == HEIGHT-1)
             {
                 printf("_");
             }
@@ -151,4 +177,8 @@ void initWall(void)
         }
         printf("\n");
     }
+}
+void sp(void) {
+    score = s * 10;
+    printf("你的分数为：%d", score);
 }
