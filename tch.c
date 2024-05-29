@@ -2,20 +2,23 @@
 #include <stdio.h>
 #include <conio.h>
 #include <windows.h>
-#include<graphics.h>
+#include<graphics.h>//该文件库无法识别的，应该是没有安装eazy-X，删掉这一串就好了
 #include "tcs.h"
 int main(int argc, char* argv[]) {
     //隐藏光标 
     CONSOLE_CURSOR_INFO cursor_info = { 1, 0 };
     SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &cursor_info);
     initSnake();
+    //snake.size += 10;//仅为测试bodydie使用
     while (1) {
+        walldie();
+        bodydie();
         daw();
         input();
         move();
-        //system("cls");
-        //daw();
-        Sleep(100);
+        Sleep(200);//Sleep为暂时替代速度调试
+        //speed_change();
+        
     }
     return 0;
 }
@@ -39,8 +42,8 @@ void daw(void) {
     i = 0;
     for (i; i < snake.size; i++)
     {
-        coord.X = snake.body[i].x;
-        coord.Y = snake.body[i].y;
+        coord.X = snake.body[i].x ;
+        coord.Y = snake.body[i].y ;
         //这串长代码可以改变光标位置 
         SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
         if (i == 0)
@@ -98,23 +101,29 @@ void move(void) {
         snake.body[i].x = snake.body[i - 1].x;
         snake.body[i].y = snake.body[i - 1].y;
     }
-    snake.body[0].x += dirX;
-    snake.body[0].y += dirY;
-
+    snake.body[0].x += dirX ;
+    snake.body[0].y += dirY ;
+    
 }
 //尚未完成的死亡机制 ,后续完善 
 void walldie(void) {
-    if (snake.body[0].x <= 0 || snake.body[0].x >= WIDTH || snake.body[0].y <= 0 || snake.body[0].x >= HEIGHT)
+    if (snake.body[0].x <= 0 || snake.body[0].x >= WIDTH || snake.body[0].y <= 0 || snake.body[0].y >= HEIGHT) {
         printf("YOU DIE!!!");
-    return;
+        exit(0);
+    }
 }
 void bodydie(void) {
     i = 1;
     for (i; i < snake.size; i++) {
-        if (snake.body[0].x == snake.body[i].x && snake.body[0].y == snake.body[i].y)
+        if (snake.body[0].x == snake.body[i].x && snake.body[0].y == snake.body[i].y) {
             printf("YOU DIE!!!");
-        return;
+            exit(0);
+        }
     }
 }
-
-
+void speed_change(void) {
+    if (1) {
+        Sleep(snake.speed);
+        snake.speed -= 3;
+    }
+}
