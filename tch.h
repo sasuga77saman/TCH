@@ -8,6 +8,11 @@ int score = 0;
 int lastx = 0;
 int lasty = 0;
 int dirX = 1, dirY = 0;
+struct FOOD
+{
+	int x;
+	int y;
+}food;
 //蛇的身体节点坐标结构体 
 struct BODY
 {
@@ -37,4 +42,6 @@ void bodydie(void);// 身体触碰死亡
 void walldie(void);//墙壁触碰死亡 
 void speed_change(void);//速度改变
 void sp(void);
+void eat_food(void);//统计分数
+void food_sc(void);//食物生成
 #endif
