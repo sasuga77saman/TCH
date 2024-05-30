@@ -2,25 +2,41 @@
 #include <conio.h>
 #include <windows.h>
 #include "tcs.h"
-#include<time.h>
+#include<mmsystem.h>
+#pragma comment(lib,"winmm.lib")
+
+
 int main(int argc, char* argv[]) {
+    //mciSendString("open ./res/she.mp3 alias BGM", 0, 0, 0);
+    //mciSendString("play BGM repeat", 0, 0, 0);
+    //SetConsoleTitle("贪吃蛇大作战");
+
+    system("color E0");
+
+
     //隐藏光标 
     CONSOLE_CURSOR_INFO cursor_info = { 1, 0 };
     SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &cursor_info);
     initSnake();
+    initWall();
+    food_sc();
+    food1_sc();
+    food2_sc();
+    food3_sc();
+    //snake.size += 10;//仅为测试bodydie使用
     while (1) {
+        eat_food();
+        walldie();
+        bodydie();
         daw();
         input();
         move();
-        //system("cls");
-        //daw();
-        Sleep(100);
+        Sleep(snake.speed);
+
     }
-    srand((unsigned int)time(NULL)); //设置随机数生成起点
-    RandFood(); //随机生成食物
+    system("pause");
     return 0;
 }
-
 //蛇模型的初始化，出生位置为场景中心 
 void initSnake(void) {
     snake.size = 3;
@@ -34,8 +50,10 @@ void initSnake(void) {
     snake.body[2].x = WIDTH / 2 - 2;
     snake.body[2].y = HEIGHT / 2;
 }
+
 //画出初始的蛇 
 void daw(void) {
+
     //COORD为conin库中结构体 
     COORD coord = { 0 };
     i = 0;
@@ -55,6 +73,7 @@ void daw(void) {
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
     printf(" ");
 }
+
 void input(void) {
     //_kbhit函数确认是否从键盘获取值，获得输出真；反之亦然 
     if (_kbhit())
@@ -89,6 +108,7 @@ void input(void) {
         }
     }
 }
+
 void move(void) {
 
     //从尾部开始，将前一个位置赋值给后一个 ，以达到移动的目的 
@@ -104,46 +124,138 @@ void move(void) {
     snake.body[0].y += dirY;
 
 }
-//尚未完成的死亡机制 ,后续完善 
+
 void walldie(void) {
-    if (snake.body[0].x <= 0 || snake.body[0].x >= WIDTH || snake.body[0].y <= 0 || snake.body[0].x >= HEIGHT)
+    COORD coord = { 0 };
+    if (snake.body[0].x <= 0 || snake.body[0].x >= WIDTH || snake.body[0].y <= 0 || snake.body[0].y >= HEIGHT) {
+        coord.X = WIDTH / 2 - 8;
+        coord.Y = HEIGHT / 2 - 3;
+        //这串长代码可以改变光标位置 
+        SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
         printf("YOU DIE!!!");
-    return;
-}
-void bodydie(void) {
-    i = 1;
-    for (i; i < snake.size; i++) {
-        if (snake.body[0].x == snake.body[i].x && snake.body[0].y == snake.body[i].y)
-            printf("YOU DIE!!!");
-        return;
+        coord.X = 0;
+        coord.Y = 29;
+        SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
+        printf("Game Over\n");
+        sp();
+        exit(0);
     }
 }
-//光标跳转
-void CursorJump(int x, int y)
-{
-    COORD pos; //定义光标位置的结构体变量
-    pos.X = x; //横坐标
-    pos.Y = y; //纵坐标
-    HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE); //获取控制台句柄
-    SetConsoleCursorPosition(handle, pos); //设置光标位置
+
+void bodydie(void) {
+    COORD coord = { 0 };
+    i = 1;
+    for (i; i < snake.size; i++) {
+        if (snake.body[0].x == snake.body[i].x && snake.body[0].y == snake.body[i].y) {
+            coord.X = WIDTH / 2 - 8;
+            coord.Y = HEIGHT / 2 - 3;
+            //这串长代码可以改变光标位置 
+            SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
+            printf("YOU DIE!!!");
+            coord.X = 0;
+            coord.Y = 29;
+            SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
+            printf("Game Over\n");
+            sp();
+            exit(0);
+        }
+    }
 }
-//颜色设置
-void color(int c)
-{
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), c); //颜色设置  
+
+void speed_change(void) {
+    snake.speed -= 20;
 }
-//随机生成食物
-void RandFood()
+
+void initWall(void)
 {
-    int i, j;
-    do
+    for (size_t i = 0; i <= HEIGHT - 1; i++)
     {
-        //随机生成食物的横纵坐标
-        i = rand() % WIDTH;
-        j = rand() % HEIGHT;
-    } while (face[i][j] != KONG); //确保生成食物的位置为空，若不为空则重新生成
-    face[i][j] = FOOD; //将食物位置进行标记
-    color(12); //颜色设置为红色
-    CursorJump(2 * j, i); //光标跳转到生成的随机位置处
-    printf("●"); //打印食物
+        for (size_t j = 0; j <= WIDTH; j++)
+        {
+            if (j == WIDTH)
+            {
+                printf("|");
+            }
+            else if (i == HEIGHT - 1)
+            {
+                printf("_");
+            }
+            else {
+                printf(" ");
+            }
+        }
+        printf("\n");
+    }
+}
+
+void sp(void) {
+    score = s * 10;
+    printf("你的分数为：%d", score);
+}
+
+void eat_food(void) {
+    if (snake.body[0].x == food.x && snake.body[0].y == food.y) {
+        snake.size++;
+        s++;
+        food_sc();
+    }
+    if (snake.body[0].x == food1.x && snake.body[0].y == food1.y) {
+        speed_change();
+        s++;
+        food1_sc();
+    }
+    if (snake.body[0].x == food2.x && snake.body[0].y == food2.y) {
+        snake.size--;
+        s--;
+        food2_sc();
+    }
+    if (snake.body[0].x == food3.x && snake.body[0].y == food3.y) {
+        s = s * 2;
+        food3_sc();
+    }
+}
+
+void food_sc(void) {
+    COORD coord = { 0 };
+
+    food.x = rand() % WIDTH - 1;
+    food.y = rand() % HEIGHT - 1;
+
+    coord.X = food.x;
+    coord.Y = food.y;
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
+    printf("#");
+}
+void food1_sc(void) {
+    COORD coord = { 0 };
+
+    food1.x = rand() % WIDTH - 1;
+    food1.y = rand() % HEIGHT - 1;
+
+    coord.X = food1.x;
+    coord.Y = food1.y;
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
+    printf("+");
+}
+void food2_sc(void) {
+    COORD coord = { 0 };
+
+    food2.x = rand() % WIDTH - 1;
+    food2.y = rand() % HEIGHT - 1;
+
+    coord.X = food2.x;
+    coord.Y = food2.y;
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
+    printf("-");
+}
+void food3_sc(void) {
+    COORD coord = { 0 };
+
+    food3.x = rand() % WIDTH - 1;
+    food3.y = rand() % HEIGHT - 1;
+
+    coord.X = food3.x;
+    coord.Y = food3.y;
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
+    printf("$");
 }
