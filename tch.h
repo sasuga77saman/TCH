@@ -24,15 +24,41 @@ struct SNAKE
 {
 	struct BODY body[WIDTH * HEIGHT];
 	int size;
-	int speed = 200;
+	int sz = 1;
+	int speed = 100;
 } snake;
+struct FOOD1
+{
+	int x;
+	int y;
+}food1;
 
+struct FOOD2
+{
+	int x;
+	int y;
+}food2;
 
+struct FOOD3
+{
+	int x;
+	int y;
+}food3;
 
-//场景，待完善
+struct FOOD4
+{
+	int x;
+	int y;
+}food4;
 
+struct FOOD5
+{
+	int x;
+	int y;
+	int fx = 1;
+}food5;
 
-
+//声明：
 void initSnake(void);//初始化蛇 
 void initWall(void);
 void daw(void);//画蛇 
@@ -44,4 +70,9 @@ void speed_change(void);//速度改变
 void sp(void);
 void eat_food(void);//统计分数
 void food_sc(void);//食物生成
+void food1_sc(void);
+void food2_sc(void);
+void food3_sc(void);
+void food4_sc(void);
+void food5_sc(void);
 #endif
