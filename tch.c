@@ -1,4 +1,3 @@
-//由dev c++编辑，如整体代码无法运行，请拆分使用 
 #include <stdio.h>
 #include <conio.h>
 #include <windows.h>
@@ -6,24 +5,31 @@
 #include "tcs.h"
 #include<mmsystem.h>
 #pragma comment(lib,"winmm.lib")
+
+
 int main(int argc, char* argv[]) {
     mciSendString("open ./res/she.mp3 alias BGM", 0, 0, 0);
     mciSendString("play BGM repeat", 0, 0, 0);
+    SetConsoleTitle("贪吃蛇大作战");
+
+    system("color E0");
+
 
     //隐藏光标 
     CONSOLE_CURSOR_INFO cursor_info = { 1, 0 };
     SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &cursor_info);
     initSnake();
     initWall();
+    food_sc();
     //snake.size += 10;//仅为测试bodydie使用
     while (1) {
+        eat_food();
         walldie();
         bodydie();
         daw();
         input();
         move();
-        Sleep(200);//Sleep为暂时替代速度调试
-        //speed_change();
+        Sleep(snake.speed);
 
     }
     system("pause");
@@ -42,7 +48,6 @@ void initSnake(void) {
     snake.body[2].x = WIDTH / 2 - 2;
     snake.body[2].y = HEIGHT / 2;
 }
-
 
 //画出初始的蛇 
 void daw(void) {
@@ -66,6 +71,7 @@ void daw(void) {
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
     printf(" ");
 }
+
 void input(void) {
     //_kbhit函数确认是否从键盘获取值，获得输出真；反之亦然 
     if (_kbhit())
@@ -100,6 +106,7 @@ void input(void) {
         }
     }
 }
+
 void move(void) {
 
     //从尾部开始，将前一个位置赋值给后一个 ，以达到移动的目的 
@@ -115,6 +122,7 @@ void move(void) {
     snake.body[0].y += dirY;
 
 }
+
 void walldie(void) {
     COORD coord = { 0 };
     if (snake.body[0].x <= 0 || snake.body[0].x >= WIDTH || snake.body[0].y <= 0 || snake.body[0].y >= HEIGHT) {
@@ -131,6 +139,7 @@ void walldie(void) {
         exit(0);
     }
 }
+
 void bodydie(void) {
     COORD coord = { 0 };
     i = 1;
@@ -152,11 +161,9 @@ void bodydie(void) {
 }
 
 void speed_change(void) {
-    if (1) {
-        Sleep(snake.speed);
-        snake.speed -= 3;
-    }
+        snake.speed -= 10;
 }
+
 void initWall(void)
 {
     for (size_t i = 0; i <= HEIGHT-1; i++)
@@ -178,7 +185,29 @@ void initWall(void)
         printf("\n");
     }
 }
+
 void sp(void) {
     score = s * 10;
     printf("你的分数为：%d", score);
+}
+
+void eat_food(void) {
+    if (snake.body[0].x ==food.x  && snake.body[0].y == food.y) {
+        snake.size++;
+        speed_change();
+        s++;
+        food_sc();
+    }
+}
+
+void food_sc(void) {
+    COORD coord = { 0 };
+    
+    food.x = rand() % WIDTH-1;
+    food.y = rand() % HEIGHT-1;
+
+    coord.X = food.x;
+    coord.Y = food.y;
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
+    printf("#");
 }
