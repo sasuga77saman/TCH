@@ -169,14 +169,17 @@ void speed_change(void) {
     snake.speed -= 10*snake.sz;
     snake.sz = abs(snake.sz);
 }
-
 void initWall(void)
 {
     for (size_t i = 0; i <= HEIGHT - 1; i++)
     {
         for (size_t j = 0; j <= WIDTH; j++)
         {
-            if (j == WIDTH)
+            if (i == 1)
+            {
+                printf("ˉ");
+            }
+            else if (j == WIDTH)
             {
                 printf("|");
             }
@@ -184,8 +187,13 @@ void initWall(void)
             {
                 printf("_");
             }
+            else if (j == 0)
+            {
+                printf("|");
+            }
             else {
                 printf(" ");
+
             }
         }
         printf("\n");
