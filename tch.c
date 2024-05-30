@@ -21,6 +21,11 @@ int main(int argc, char* argv[]) {
     initSnake();
     initWall();
     food_sc();
+    food1_sc();
+    food2_sc();
+    food3_sc();
+    food5_sc();
+    food4_sc();
     //snake.size += 10;//仅为测试bodydie使用
     while (1) {
         eat_food();
@@ -80,27 +85,27 @@ void input(void) {
         {
         case 'a':
             if (abs(dirX) != 1 && dirY != 0) {
-                dirX = -1;
+                dirX = -1 * food5.fx;
                 dirY = 0;
             }
             break;
 
         case 'd':
             if (abs(dirX) != 1 && dirY != 0) {
-                dirX = 1;
+                dirX = 1 * food5.fx;
                 dirY = 0;
             }
             break;
         case 'w':
             if (dirX != 0 && abs(dirY) != 1) {
                 dirX = 0;
-                dirY = -1;
+                dirY = -1 * food5.fx;
             }
             break;
         case 's':
             if (dirX != 0 && abs(dirY) != 1) {
                 dirX = 0;
-                dirY = 1;
+                dirY = 1 * food5.fx;
             }
             break;
         }
@@ -161,12 +166,13 @@ void bodydie(void) {
 }
 
 void speed_change(void) {
-        snake.speed -= 10;
+    snake.speed -= 10*snake.sz;
+    snake.sz = abs(snake.sz);
 }
 
 void initWall(void)
 {
-    for (size_t i = 0; i <= HEIGHT-1; i++)
+    for (size_t i = 0; i <= HEIGHT - 1; i++)
     {
         for (size_t j = 0; j <= WIDTH; j++)
         {
@@ -174,7 +180,7 @@ void initWall(void)
             {
                 printf("|");
             }
-            else if (i == HEIGHT-1)
+            else if (i == HEIGHT - 1)
             {
                 printf("_");
             }
@@ -191,23 +197,160 @@ void sp(void) {
     printf("你的分数为：%d", score);
 }
 
-void eat_food(void) {
-    if (snake.body[0].x ==food.x  && snake.body[0].y == food.y) {
-        snake.size++;
-        speed_change();
-        s++;
-        food_sc();
-    }
-}
+
 
 void food_sc(void) {
     COORD coord = { 0 };
-    
-    food.x = rand() % WIDTH-1;
-    food.y = rand() % HEIGHT-1;
+
+    food.x = rand() % WIDTH - 1;
+    food.y = rand() % HEIGHT - 1;
 
     coord.X = food.x;
     coord.Y = food.y;
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
     printf("#");
+}
+void eat_food(void)
+{
+    if (snake.body[0].x == food.x && snake.body[0].y == food.y) {
+        if(food5.fx<0)
+        food5.fx = -food5.fx;
+        snake.size++;
+        speed_change();
+        s++;
+        food_sc();
+    }
+    if (snake.body[0].x == food1.x && snake.body[0].y == food1.y) {
+        if (food5.fx < 0)
+        food5.fx = -food5.fx;
+        snake.size++;
+        speed_change();
+        s++;
+        food1_sc();
+    }
+
+    if (snake.body[0].x == food2.x && snake.body[0].y == food2.y) {
+        COORD coord = { 0 };
+        if (food5.fx < 0)
+        food5.fx = -food5.fx;
+        if (snake.size != 1 && snake.size != 2) {
+            i = snake.size - 2;
+            for (i; i < snake.size; i++) {
+                coord.X = snake.body[i].x;
+                coord.Y = snake.body[i].y;
+                SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
+                printf(" ");
+
+            }
+            snake.size -= 2;
+        }
+        speed_change();
+        s += 5;
+        food2_sc();
+    }
+
+    if (snake.body[0].x == food3.x && snake.body[0].y == food3.y) {
+        if (food5.fx < 0)
+        food5.fx = -food5.fx;
+        COORD coord = { 0 };
+        coord.X = snake.body[0].x;
+        coord.Y = snake.body[0].y;
+        snake.body[0].x -= 5;
+        speed_change();
+        s++;
+        SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
+        printf(" ");
+        food3_sc();
+    }
+    
+    if (snake.body[0].x == food4.x && snake.body[0].y == food4.y) {
+        if (food5.fx < 0)
+        food5.fx = -food5.fx;
+        COORD coord = { 0 };
+        coord.X = snake.body[0].x;
+        coord.Y = snake.body[0].y;
+        snake.body[0].x += 10;
+        speed_change();
+        s++;
+        SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
+        printf(" ");
+        food4_sc();
+    }
+    if (snake.body[0].x == food5.x && snake.body[0].y == food5.y) {
+        if (food5.fx < 0)
+        snake.size++;
+        food5.fx = -food5.fx;
+        speed_change();
+        s += 5;
+        food5_sc();
+    }
+    
+   
+
+    
+
+}
+
+void food1_sc(void) {
+    COORD coord = { 0 };
+
+    food1.x = rand() % WIDTH - 1;
+    food1.y = rand() % HEIGHT - 1;
+
+    coord.X = food1.x;
+    coord.Y = food1.y;
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
+    printf("#");
+
+}
+void food2_sc(void) {
+    COORD coord = { 0 };
+
+    food2.x = rand() % WIDTH - 8;
+    food2.y = rand() % HEIGHT - 8;
+
+    coord.X = food2.x;
+    coord.Y = food2.y;
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
+    printf("$");
+
+}
+
+void food3_sc(void) {
+    COORD coord = { 0 };
+
+    food3.x = rand() % WIDTH - 1;
+    food3.y = rand() % HEIGHT - 1;
+
+    coord.X = food3.x;
+    coord.Y = food3.y;
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
+    printf("<");
+
+}
+
+void food4_sc(void) {
+    COORD coord = { 0 };
+
+    food4.x = rand() % WIDTH - 1;
+    food4.y = rand() % HEIGHT - 1;
+
+    coord.X = food4.x;
+    coord.Y = food4.y;
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
+    printf(">");
+
+}
+
+void food5_sc(void) {
+    COORD coord = { 0 };
+
+    food5.x = rand() % WIDTH - 6;
+    food5.y = rand() % HEIGHT - 6;
+
+    coord.X = food5.x;
+    coord.Y = food5.y;
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
+    printf("s");
+
 }
