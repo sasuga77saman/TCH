@@ -8,7 +8,7 @@
 
 
 int main(int argc, char* argv[]) {
-    mciSendString("open ./res/she.mp3 alias BGM", 0, 0, 0);
+    mciSendString("open ./res/she.mp3.mp3 alias BGM", 0, 0, 0);
     mciSendString("play BGM repeat", 0, 0, 0);
     SetConsoleTitle("贪吃蛇大作战");
 
@@ -144,8 +144,10 @@ void move(void) {
 void walldie(void) {
     COORD coord = { 0 };
     if (snake.body[0].x <= 0 || snake.body[0].x >= WIDTH || snake.body[0].y <= 0 || snake.body[0].y >= HEIGHT) {
+       
         coord.X = WIDTH / 2 - 8;
         coord.Y = HEIGHT / 2 - 3;
+        
         //这串长代码可以改变光标位置 
         SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
         printf("YOU DIE!!!");
@@ -163,15 +165,19 @@ void bodydie(void) {
     i = 1;
     for (i; i < snake.size; i++) {
         if (snake.body[0].x == snake.body[i].x && snake.body[0].y == snake.body[i].y) {
+            
             coord.X = WIDTH / 2 - 8;
             coord.Y = HEIGHT / 2 - 3;
+            
             //这串长代码可以改变光标位置 
             SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
             printf("YOU DIE!!!");
+            
             coord.X = 0;
             coord.Y = 29;
             SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
             printf("Game Over\n");
+            
             sp();
             exit(0);
         }
@@ -240,8 +246,8 @@ void eat_food(void)
         speed_change();
         s++;
         food_sc();
-        mciSendString(_T("open D:\\shujujiego\\she\\res\\y2329.mp3 alias bkmusic"), 0, 0, 0);
-        mciSendString(_T("play bkmusic"), 0, 0, 0);
+        PlaySound(_T("D:/shujujiego/she/y2329.wav.wav"), NULL, SND_FILENAME | SND_ASYNC);
+
     }
     if (snake.body[0].x == food1.x && snake.body[0].y == food1.y) {
         if (food5.fx < 0)
@@ -250,9 +256,7 @@ void eat_food(void)
         speed_change();
         s++;
         food1_sc();
-        mciSendString(_T("close 1music"), 0, 0, 0);
-        mciSendString(_T("open D:\\shujujiego\\she\\res\\y2329.mp3 alias bkmusic"), 0, 0, 0);
-        mciSendString(_T("play 1music"), 0, 0, 0);
+        PlaySound(_T("D:/shujujiego/she/y2329.wav.wav"), NULL, SND_FILENAME | SND_ASYNC);
     }
 
     if (snake.body[0].x == food2.x && snake.body[0].y == food2.y) {
@@ -273,9 +277,7 @@ void eat_food(void)
         speed_change();
         s += 5;
         food2_sc();
-        mciSendString(_T("close 2music"), 0, 0, 0);
-        mciSendString(_T("open D:\\shujujiego\\she\\res\\y2329.mp3 alias bkmusic"), 0, 0, 0);
-        mciSendString(_T("play 2music"), 0, 0, 0);
+        PlaySound(_T("D:/shujujiego/she/y2329.wav.wav"), NULL, SND_FILENAME | SND_ASYNC);
     }
 
     if (snake.body[0].x == food3.x && snake.body[0].y == food3.y) {
@@ -290,9 +292,7 @@ void eat_food(void)
         SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
         printf(" ");
         food3_sc();
-        mciSendString(_T("close 3music"), 0, 0, 0);
-        mciSendString(_T("open D:\\shujujiego\\she\\res\\y2329.mp3 alias bkmusic"), 0, 0, 0);
-        mciSendString(_T("play 3music"), 0, 0, 0);
+        PlaySound(_T("D:/shujujiego/she/y2329.wav.wav"), NULL, SND_FILENAME | SND_ASYNC);
     }
 
     if (snake.body[0].x == food4.x && snake.body[0].y == food4.y) {
@@ -307,9 +307,7 @@ void eat_food(void)
         SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
         printf(" ");
         food4_sc();
-        mciSendString(_T("close 4music"), 0, 0, 0);
-        mciSendString(_T("open D:\\shujujiego\\she\\res\\y2329.mp3 alias bkmusic"), 0, 0, 0);
-        mciSendString(_T("play 4music"), 0, 0, 0);
+        PlaySound(_T("D:/shujujiego/she/y2329.wav.wav"), NULL, SND_FILENAME | SND_ASYNC);
     }
     if (snake.body[0].x == food5.x && snake.body[0].y == food5.y) {
         if (food5.fx < 0)
@@ -318,9 +316,7 @@ void eat_food(void)
         speed_change();
         s += 5;
         food5_sc();
-        mciSendString(_T("close 5music"), 0, 0, 0);
-        mciSendString(_T("open D:\\shujujiego\\she\\res\\y2329.mp3 alias bkmusic"), 0, 0, 0);
-        mciSendString(_T("play 5music"), 0, 0, 0);
+        PlaySound(_T("D:/shujujiego/she/y2329.wav.wav"), NULL, SND_FILENAME | SND_ASYNC);
     }
 
 
