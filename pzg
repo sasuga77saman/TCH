@@ -8,7 +8,7 @@
 
 
 int main(int argc, char* argv[]) {
-    //mciSendString("open ./she/play sneck.wav alias BGM", 0, 0, 0);
+    //mciSendString("open ./电台节目/play sneck.wav alias BGM", 0, 0, 0);
     //mciSendString("play BGM repeat", 0, 0, 0);
     //SetConsoleTitle("贪吃蛇大作战");
 
@@ -20,7 +20,7 @@ int main(int argc, char* argv[]) {
     SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &cursor_info);
     initSnake();
     initWall();
-    food1_sc();
+    food1_sc(); 
     food2_sc();
     food3_sc();
     food4_sc();
@@ -137,10 +137,12 @@ void walldie(void) {
         //这串长代码可以改变光标位置 
         SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
         printf("YOU DIE!!!");
+        PlaySound(_T("D:/贪吃蛇小游戏/she/失败.wav"), NULL, SND_FILENAME | SND_ASYNC);
         coord.X = 0;
         coord.Y = 29;
         SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
         printf("Game Over\n");
+        
         sp();
         exit(0);
     }
@@ -156,10 +158,12 @@ void bodydie(void) {
             //这串长代码可以改变光标位置 
             SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
             printf("YOU DIE!!!");
+            PlaySound(_T("D:/贪吃蛇小游戏/she/失败.wav"), NULL, SND_FILENAME | SND_ASYNC);         
             coord.X = 0;
             coord.Y = 29;
             SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
             printf("Game Over\n");
+            
             sp();
             exit(0);
         }
@@ -176,7 +180,11 @@ void initWall(void)
     {
         for (size_t j = 0; j <= WIDTH; j++)
         {
-            if (j == WIDTH)
+            if (i == 0)
+            {
+                printf("_");
+            }
+            else if (j == WIDTH)
             {
                 printf("|");
             }
@@ -184,8 +192,13 @@ void initWall(void)
             {
                 printf("_");
             }
+            else if (j == 0)
+            {
+                printf("|");
+            }
             else {
                 printf(" ");
+
             }
         }
         printf("\n");
@@ -200,13 +213,14 @@ void sp(void) {
 
 void eat_food(void)
 {
+
     if (snake.body[0].x == food1.x && snake.body[0].y == food1.y) {
         snake.size++;
         speed_change();
         s++;
         food1_sc();
-        mciSendString(_T("open D:\\CloudMusic\\电台节目\\y2329.mp3 alias bkmusic"), 0, 0, 0);
-        mciSendString(_T("play bkmusic"), 0, 0, 0);
+        PlaySound(_T("D:/贪吃蛇小游戏/she/y2329.wav.wav"), NULL, SND_FILENAME | SND_ASYNC);
+ 
     }
 
     if (snake.body[0].x == food2.x && snake.body[0].y == food2.y) {
@@ -214,9 +228,8 @@ void eat_food(void)
         speed_change();
         s += 5;
         food2_sc();
-        mciSendString(_T("close 1music"),0,0,0);
-        mciSendString(_T("open D:\\CloudMusic\\电台节目\\y2329.mp3 alias 1music"), 0, 0, 0);
-        mciSendString(_T("play 1wAAmusic"), 0, 0, 0);
+        PlaySound(_T("D:/贪吃蛇小游戏/she/y2329.wav.wav"), NULL, SND_FILENAME | SND_ASYNC);
+        
     }
 
     if (snake.body[0].x == food3.x && snake.body[0].y == food3.y) {
@@ -229,9 +242,8 @@ void eat_food(void)
         SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
         printf(" ");
         food3_sc();
-        mciSendString(_T("close 2music"), 0, 0, 0);
-        mciSendString(_T("open D:\\CloudMusic\\电台节目\\y2329.mp3 alias 2music"), 0, 0, 0);
-        mciSendString(_T("play 2music"), 0, 0, 0);
+        PlaySound(_T("D:/贪吃蛇小游戏/she/y2329.wav.wav"), NULL, SND_FILENAME | SND_ASYNC);
+       
     }
     if (snake.body[0].x == food4.x && snake.body[0].y == food4.y) {
         COORD coord = { 0 };
@@ -243,9 +255,8 @@ void eat_food(void)
         SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
         printf(" ");
         food4_sc();
-        mciSendString(_T("close 3music"), 0, 0, 0);
-        mciSendString(_T("open D:\\CloudMusic\\电台节目\\y2329.mp3 alias 3music"), 0, 0, 0);
-        mciSendString(_T("play 3music"), 0, 0, 0);
+        PlaySound(_T("D:/贪吃蛇小游戏/she/y2329.wav.wav"), NULL, SND_FILENAME | SND_ASYNC);
+       
     }
 
     if (snake.body[0].x == food5.x && snake.body[0].y == food5.y) {
@@ -257,9 +268,8 @@ void eat_food(void)
         speed_change();
         s += 15;
         food5_sc();
-        mciSendString(_T("close 4music"), 0, 0, 0);
-        mciSendString(_T("open D:\\CloudMusic\\电台节目\\y2329.mp3 alias 4music"), 0, 0, 0);
-        mciSendString(_T("play 4music"), 0, 0, 0);
+        PlaySound(_T("D:/贪吃蛇小游戏/she/y2329.wav.wav"), NULL, SND_FILENAME | SND_ASYNC);
+       
     }
 
 }
