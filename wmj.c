@@ -8,7 +8,7 @@
 
 
 int main(int argc, char* argv[]) {
-    mciSendString("open ./res/she.mp3.mp3 alias BGM", 0, 0, 0);
+    mciSendString("open ./she.mp3.mp3 alias BGM", 0, 0, 0);
     mciSendString("play BGM repeat", 0, 0, 0);
     SetConsoleTitle("贪吃蛇大作战");
 
