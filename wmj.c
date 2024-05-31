@@ -29,8 +29,9 @@ int main(int argc, char* argv[]) {
     //snake.size += 10;//仅为测试bodydie使用
     while (1) {
         eat_food();
-        walldie();
         bodydie();
+        walldie();
+ 
         daw();
         input();
         move();
@@ -126,6 +127,18 @@ void move(void) {
     snake.body[0].x += dirX;
     snake.body[0].y += dirY;
 
+        if (snake.body[0].y >= HEIGHT-1)//超出边界
+        {
+         snake.body[0].y = 2;
+        }
+
+        if (snake.body[0].x >= WIDTH -1)//超出边界
+        {
+            snake.body[0].x = 2;
+        }
+
+    
+
 }
 
 void walldie(void) {
@@ -177,9 +190,9 @@ void initWall(void)
         {
             if (i == 1)
             {
-                printf("ˉ");
+                printf("-");
             }
-            else if (j == WIDTH)
+            else if (j == WIDTH && i>=1 )
             {
                 printf("|");
             }
