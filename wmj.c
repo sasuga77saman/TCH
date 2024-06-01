@@ -151,11 +151,13 @@ void walldie(void) {
         //这串长代码可以改变光标位置 
         SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
         printf("YOU DIE!!!");
+        PlaySound(_T("D:/shujujiego/she/射击音效.wav"), NULL, SND_FILENAME | SND_ASYNC);
         coord.X = 0;
         coord.Y = 29;
         SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
         printf("Game Over\n");
         sp();
+        Sleep(500);
         exit(0);
     }
 }
@@ -177,8 +179,9 @@ void bodydie(void) {
             coord.Y = 29;
             SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
             printf("Game Over\n");
-            
+            PlaySound(_T("D:/shujujiego/she/射击音效.wav"), NULL, SND_FILENAME | SND_ASYNC);
             sp();
+            Sleep(500);
             exit(0);
         }
     }
@@ -318,10 +321,6 @@ void eat_food(void)
         food5_sc();
         PlaySound(_T("D:/shujujiego/she/y2329.wav.wav"), NULL, SND_FILENAME | SND_ASYNC);
     }
-
-
-
-
 
 }
 
